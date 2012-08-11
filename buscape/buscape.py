@@ -18,7 +18,9 @@ class Buscape():
             
         self.applicationID = applicationID
 
-        self.environment = 'bws'
+        #self.environment = 'bws'
+        
+        self.set_sandbox()
         
         if country is None:
             self.country = "BR"
@@ -68,16 +70,13 @@ class Buscape():
         self.environment = 'sandbox'
 
 
-    def find_category_list(self, keyword=None, categoryID=None, format='XML'):
+    def find_category_list(self, keyword=None, categoryID=None, format='json'):
         """
         Método faz busca de categorias, permite que você exiba informações
 	relativas às categorias. É possível obter categorias, produtos ou ofertas
 	informando apenas um ID de categoria.
         """
 
-        if format.upper() not in ["XML","JSON"]:
-            raise ValueError("the return format must be XML or JSON")
-        
         if not keyword and (categoryID < 0 or categoryID is None or categoryID==''): 
             raise ValueError("keyword or categoryID option must be specified")
         elif keyword and categoryID:
@@ -98,7 +97,7 @@ class Buscape():
       
         
     
-    def find_product_list(self, keyword=None, categoryID=None, format='XML', lomadee=False, results=10,
+    def find_product_list(self, keyword=None, categoryID=None, format='json', lomadee=False, results=10,
                             page=1, minPrice=0.0, maxPrice=0.0):
         """
         Método permite que você busque uma lista de produtos únicos
@@ -106,9 +105,6 @@ class Buscape():
 	ou ambos.
         """
                             
-        if format.upper() not in ["XML","JSON"]:
-            raise ValueError("the return format must be XML or JSON")
-        
         if not keyword and (categoryID < 0 or categoryID is None or categoryID==''):
             raise ValueError("keyword or categoryID option must be specified")
         
@@ -150,7 +146,7 @@ class Buscape():
         return ret
 
 
-    def create_source_id(self, sourceName=None, publisherID=None, siteID=None, campaignList=None, token=None, format='XML'):
+    def create_source_id(self, sourceName=None, publisherID=None, siteID=None, campaignList=None, token=None, format='json'):
         """
         Serviço utilizado somente na integração do Aplicativo com o Lomadee.
 	Dentro do fluxo de integração, o aplicativo utiliza esse serviço para
@@ -161,9 +157,6 @@ class Buscape():
 	fictícios pois neste ambiente este serviço retornará sempre o mesmo sourceId
 	para os testes do Developer.
         """
-
-        if format.upper() not in ["XML","JSON"]:
-            raise ValueError("the return format must be XML or JSON")
 
         if sourceName is None:
             raise ValueError("sourceName option must be specified")
@@ -187,16 +180,13 @@ class Buscape():
         return ret
 
 
-    def find_offer_list(self, categoryID=None, productID=None, barcode=None, keyword=None, lomadee=False, format="XML",
+    def find_offer_list(self, categoryID=None, productID=None, barcode=None, keyword=None, lomadee=False, format="json",
                         results=None, page=None, priceMin=None, priceMax=None, sort=None, medal=None):
         """
         Método permite que você busque uma lista de produtos únicos
 	utilizando o id da categoria final ou um conjunto de palavras-chaves
 	ou ambos.
         """
-
-        if format.upper() not in ["XML","JSON"]:
-            raise ValueError("the return format must be XML or JSON")
 
         if lomadee:
             method = 'findOfferList/lomadee'
@@ -248,13 +238,10 @@ class Buscape():
         return ret
 
 
-    def top_products(self, format="XML"):
+    def top_products(self, format="json"):
         """
         Método que retorna os produtos mais populares do BuscaPé.
         """
-
-        if format.upper() not in ["XML","JSON"]:
-            raise ValueError("the return format must be XML or JSON")
 
         method = "topProducts"
 
@@ -265,13 +252,10 @@ class Buscape():
         return ret
 
 
-    def view_product_details(self, productID=None,format="XML"):
+    def view_product_details(self, productID=None,format="json"):
         """
         Método retorna os detalhes técnicos de um determinado produto.
         """
-
-        if format.upper() not in ["XML","JSON"]:
-            raise ValueError("the return format must be XML or JSON")
 
         if not productID:
             raise ValueError('productID option must be specified')
@@ -285,13 +269,10 @@ class Buscape():
         return ret
 
 
-    def view_seller_details(self,sellerID=None,format="XML"):
+    def view_seller_details(self,sellerID=None,format="json"):
         """
         Método que retorna os detalhes de uma loja ou empresa como: endereços, telefones de contato e etc.
         """
-
-        if format.upper() not in ["XML","JSON"]:
-            raise ValueError("the return format must be XML or JSON")
 
         if not sellerID:
             raise ValueError("sellerID option must be specified")
@@ -305,13 +286,10 @@ class Buscape():
         return ret
 
 
-    def view_user_ratings(self, productID=None, format="XML"):
+    def view_user_ratings(self, productID=None, format="json"):
         """
         Método que retorna as avaliações dos usuários sobre um determinado produto.
         """
-
-        if format.upper() not in ["XML","JSON"]:
-            raise ValueError("the return format must be XML or JSON")
 
         if not productID:
             raise ValueError('productID option must be specified')
