@@ -6,6 +6,7 @@ __author__="Alê Borba"
 __version__="v0.6.2"
 
 from urllib2 import urlopen, Request, URLError, HTTPError
+import json
 
 class Buscape():
     """
@@ -32,7 +33,7 @@ class Buscape():
         try:
             resp = urlopen(url)
             data = resp.read()
-            return dict(code=resp.code,data=data)
+            return dict(code=resp.code,data=json.loads(data))
         except HTTPError, e:            
             if e.code == 401:
                 if self.environment == 'bws':
