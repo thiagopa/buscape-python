@@ -3,10 +3,10 @@
 
 __author__="Igor Hercowitz"
 __author__="Alê Borba"
-__version__="v0.6.2"
+__author__="Thiago Pagonha"
+__version__="v0.6.3"
 
-from urllib2 import urlopen, Request, URLError, HTTPError
-import json
+from restfulie import Restfulie
 
 class Buscape():
     """
@@ -30,24 +30,14 @@ class Buscape():
         
     
     def __fetch_url(self, url=None):       
-        try:
-            resp = urlopen(url)
-            data = resp.read()
-            return dict(code=resp.code,data=json.loads(data))
-        except HTTPError, e:            
-            if e.code == 401:
-                if self.environment == 'bws':
-                    raise HTTPError(url,e.code,"Your application is not approved yet",None,None)
-                else:
-                    raise HTTPError(url,e.code,"The request requires user authentication",None,None)
-        except URLError, e:
-            code_error = e.reason.errno
+        response = Restfulie.at(url).accepts("application/json").get()
 
-            if code_error == 11001:
-                raise URLError("no connection avaliable")
-            else:    
-                raise URLError(e)
-
+        if response.code != "200" :
+            raise Exception("Resposta do Serviço Ruim =(")
+        
+        data = response.resource()
+        
+        return data
      
     def __search(self, method=None, parameter=None):
         if self.environment != 'sandbox':
@@ -55,14 +45,8 @@ class Buscape():
 
         req = "http://%s.buscape.com/service/%s/%s/%s/?%s" %(self.environment, method, self.applicationID, self.country, parameter)
         
-        try:
-            ret = self.__fetch_url(url=req)
-            return ret  
-        except HTTPError,e:
-            raise e
-        except URLError, e:
-            raise e
-
+        ret = self.__fetch_url(url=req)
+        return ret  
             
     def set_sandbox(self):
         """
