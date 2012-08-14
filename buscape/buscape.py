@@ -7,6 +7,9 @@ __author__="Thiago Pagonha"
 __version__="v0.6.3"
 
 from restfulie import Restfulie
+import logging
+
+logger = logging.getLogger(__name__)
 
 class Buscape():
     """
@@ -30,6 +33,9 @@ class Buscape():
         
     
     def __fetch_url(self, url=None):       
+        
+        logger.info("Fetching url at %s", url)
+        
         response = Restfulie.at(url).accepts("application/json").get()
 
         if response.code != "200" :
