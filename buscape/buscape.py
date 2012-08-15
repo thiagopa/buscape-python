@@ -51,8 +51,11 @@ class Buscape():
 
         req = "http://%s.buscape.com/service/%s/%s/%s/?%s" %(self.environment, method, self.applicationID, self.country, parameter)
         
-        ret = self.__fetch_url(url=req)
+        ret = self.__fetch_url(url=self.escape(req))
         return ret  
+            
+    def escape(self,s):
+        return s.replace(' ', '+')
             
     def set_sandbox(self):
         """
